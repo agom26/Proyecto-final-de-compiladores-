@@ -14,8 +14,14 @@
 "*" {return MULTIPLICACION;}
 "/" {return DIVISION;}
 "," {return COMA;}
+"if"    {return IF;}
+"<" {return MENORQ;}
+">" {return MAYORQ;}
+"(" {return PARENTESIS_INICIO;}
+")" {return PARENTESIS_FINAL;}
 "{" {return INICIO_BLOQUE;}
 "}" {return FIN_BLOQUE;}
+""  {return VACIO;}
 ([a-zA-Z]+[0-9]*)+ {strcpy( yylval.cadena,yytext); return IDENTIFICADOR;}
 [0-9]+  {strcpy( yylval.cadena,yytext);return ENTERO;}
 .   {}

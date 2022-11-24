@@ -8,7 +8,7 @@ void nuevatemp(char *s); //genera variables temporales
 %union{
     char cadena[50];
 }
-%token SEPARADOR_SENTENCIA ASIGNACION COMA RESTA
+%token SEPARADOR_SENTENCIA ASIGNACION COMA RESTA POTENCIACION
 %token PALABRA_RESERVADA_MAIN PALABRA_RESERVADA_DEC INICIO_BLOQUE FIN_BLOQUE PALABRA_RESERVADA_INPUT
 %token PALABRA_RESERVADA_OUTPUT SUMA DIVISION MULTIPLICACION
 %token <cadena> ENTERO 
@@ -16,6 +16,7 @@ void nuevatemp(char *s); //genera variables temporales
 %type <cadena> inicio
 %type <cadena> expresion
 %type <cadena> termino
+%type <cadena> termino2
 %type <cadena> factor
 %type <cadena> variable
 %type <cadena> numero
@@ -40,21 +41,23 @@ variables: IDENTIFICADOR variables
         | COMA IDENTIFICADOR variables
         |
         ;
-lectura: PALABRA_RESERVADA_INPUT IDENTIFICADOR SEPARADOR_SENTENCIA      {printf("call input\n pop %s\n",$2);}
+lectura: PALABRA_RESERVADA_INPUT IDENTIFICADOR SEPARADOR_SENTENCIA      {printf("call input\npop %s\n",$2);}
         ;
 escritura: PALABRA_RESERVADA_OUTPUT IDENTIFICADOR SEPARADOR_SENTENCIA {printf("push %s\ncall output\n",$2);}
         ;
-asignacion: variable ASIGNACION expresion SEPARADOR_SENTENCIA   {printf("%s=%s",$1,$3);}
+asignacion: variable ASIGNACION expresion SEPARADOR_SENTENCIA   {printf("%s=%s\n",$1,$3);}
          ;
 expresion   :   expresion SUMA termino  {nuevatemp($$); printf("%s=%s+%s\n",$$,$1,$3);}
             |   expresion RESTA termino {nuevatemp($$); printf("%s=%s-%s\n",$$,$1,$3);}
             |   termino                 
             ;
 
-termino     :   termino MULTIPLICACION factor {nuevatemp($$); printf("%s=%s*%s\n",$$,$1,$3);}
-            |   termino DIVISION factor {nuevatemp($$); printf("%s=%s/%s\n",$$,$1,$3);}
-            |   factor                  
+termino     :   termino MULTIPLICACION termino2 {nuevatemp($$); printf("%s=%s*%s\n",$$,$1,$3);}
+            |   termino DIVISION termino2 {nuevatemp($$); printf("%s=%s/%s\n",$$,$1,$3);}
+            |   termino2                  
             ;
+termino2    : termino2 POTENCIACION factor {nuevatemp($$); printf("%s=%s^%s\n",$$,$1,$3);}
+            | factor 
 
 factor      :   ENTERO    
             |   IDENTIFICADOR

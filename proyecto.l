@@ -10,6 +10,7 @@
 "=" {return ASIGNACION;}
 "+" {return SUMA;}
 "-" {return RESTA;}
+"^" {return POTENCIACION;}
 "*" {return MULTIPLICACION;}
 "/" {return DIVISION;}
 "," {return COMA;}
